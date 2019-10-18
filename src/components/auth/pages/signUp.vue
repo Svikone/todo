@@ -4,7 +4,7 @@
      <form novalidate class="md-layout" @submit.prevent="validateUser">
       <md-card class="md-layout-item md-size-50 md-small-size-100">
         <md-card-header>
-          <div class="md-title">Users</div>
+          <div class="md-title">Sign Up</div>
         </md-card-header>
 
         <md-card-content>
@@ -61,7 +61,6 @@
       <md-snackbar :md-active.sync="userSaved">The user {{ lastUser }} was saved with success!</md-snackbar>
     </form>
 
-    <p>{{ passValid() }}</p>
   </section>
 
 </template>
@@ -157,6 +156,12 @@
 
 <style scoped lang="scss">
   .sign-up {
-
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    form {
+      margin: auto;
+    }
   }
 </style>

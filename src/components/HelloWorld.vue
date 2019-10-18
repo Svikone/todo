@@ -1,7 +1,6 @@
 <template>
   <div class="hello">
 
-    reee
   </div>
 </template>
 
