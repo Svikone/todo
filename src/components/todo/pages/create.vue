@@ -1,8 +1,7 @@
 <template lang="html">
 
-  <section class="auth">
-    <router-view/>
-
+  <section class="create">
+    <h1>create Component</h1>
   </section>
 
 </template>
@@ -10,7 +9,7 @@
 <script lang="js">
 
   export default  {
-    name: 'auth',
+    name: 'create',
     props: [],
     mounted () {
 
@@ -32,7 +31,7 @@
 </script>
 
 <style scoped lang="scss">
-  .auth {
-    height: 100%;
+  .create {
+
   }
 </style>

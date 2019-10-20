@@ -35,18 +35,16 @@
             <span class="md-error" v-else-if="!$v.form.email.email">Invalid email</span>
           </md-field>
 
-          <md-field>
+          <md-field :class="getValidationClass('password')">
             <label>Your password</label>
             <md-input v-model="form.password" type="password"></md-input>
-            <span class="md-error" v-if="passValidVal==false">The email is required</span>
-            <span class="md-error" v-else-if="passValidVal">Invalid email</span>
+            <span class="md-error md-invalid" v-if="passValidVal==false" id="passerr">Invalid password</span>
           </md-field>
 
-          <md-field :md-toggle-password="false">
+          <md-field :class="getValidationClass('confirmpassword')" :md-toggle-password="false">
             <label> Confirm password  </label>
             <md-input v-model="form.confirmpassword" type="password"></md-input>
-            <span class="md-error" v-if="!passValidVal">The email is required</span>
-            <span class="md-error" v-else-if="passValidVal">Invalid email</span>
+            <span class="md-error md-invalid" v-if="passValidVal==false" id="passerr">Invalid password</span>
           </md-field>
         </md-card-content>
 
@@ -81,7 +79,7 @@
 
     },
     data: () => ({
-      passwordValidVal: true,
+      passValidVal: true,
       form: {
         firstName: null,
         lastName: null,
@@ -111,9 +109,9 @@
       }
     },
     methods: {
-
       passValid: function() {
-         return this.passValidVal = this.form.password == this.form.confirmpassword
+        return this.passValidVal = this.form.password == this.form.confirmpassword
+
       },
       getValidationClass (fieldName) {
         const field = this.$v.form[fieldName]
@@ -151,7 +149,6 @@
     }
 }
 
-
 </script>
 
 <style scoped lang="scss">
@@ -162,6 +159,14 @@
     margin: auto;
     form {
       margin: auto;
+      .md-card {
+        min-width: 100%;
+      } 
+      .md-invalid {
+        opacity: 1;
+        padding-top: 5px;
+        color: #ff1744;
+      }
     }
   }
 </style>
