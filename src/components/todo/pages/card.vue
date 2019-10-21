@@ -1,22 +1,9 @@
 <template lang="html">
 
   <section class="card">
-    <!-- <md-card>
-      <md-card-header>
-        <div class="md-title">Card without hover effect</div>
-      </md-card-header>
-
-      <md-card-content>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio itaque ea, nostrum odio. Dolores, sed accusantium quasi non.
-      </md-card-content>
-
-      <md-card-actions>
-        <md-button>Action</md-button>
-        <md-button>Action</md-button>
-      </md-card-actions>
-    </md-card> -->
-    <b-alert show dismissible>{{value.val}}
-    Dismissible Alert! Click the close button over there <b>&rArr;</b>
+    <b-alert show >
+      <img class="remove" src="https://img.icons8.com/color/48/000000/close-window.png">
+      {{text}}
     </b-alert>
   </section>
 
@@ -27,8 +14,8 @@
   export default  {
     name: 'card',
     props: [
-      "index",
-      "value"
+      
+      "text"
     ],
     mounted () {
 
@@ -51,8 +38,17 @@
 
 <style scoped lang="scss">
   .card {
+    margin-top: 16px;
+
+    .remove {
+      position: absolute;
+      right: 16px;
+      cursor: pointer;
+      width: 30px;
+    }
     .alert {
       margin-bottom: unset;
     }
+    
   }
 </style>

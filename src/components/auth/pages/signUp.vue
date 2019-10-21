@@ -51,7 +51,7 @@
         <md-progress-bar md-mode="indeterminate" v-if="sending" />
 
         <md-card-actions>
-          <md-button type="submit" class="md-primary" :disabled="sending" @click="passValid">Create user</md-button>
+          <md-button type="submit" class="md-primary" :disabled="sending" @click="passValid">to register</md-button>
         </md-card-actions>
 
       </md-card>

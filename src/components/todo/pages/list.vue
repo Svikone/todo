@@ -2,8 +2,9 @@
 
   <section class="list">
     <h1>list Component</h1>
-      <card v-for = "(card, i) in cards" :index="i" :value="card"></card>
+    <card  v-for="(card, i) in cards" v-bind:text="card.text" v-bind:key="i"></card>
   </section>
+
 </template>
 
 <script lang="js">
@@ -19,14 +20,14 @@
       return {
         cards: [
           {
-            val:"hello"
+            text:"hello"
           },
           {
-            val:"hi gais"
+            text:"hi gais"
           },
           {
-            val:"tolia"
-          },
+            text:"tolia"
+          }
         ]
       }
     },
