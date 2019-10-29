@@ -46,12 +46,14 @@
             <md-input v-model="form.confirmpassword" type="password"></md-input>
             <span class="md-error md-invalid" v-if="passValidVal==false" id="passerr">Invalid password</span>
           </md-field>
+          <router-link to="/auth/signin">Login</router-link>
+
         </md-card-content>
 
         <md-progress-bar md-mode="indeterminate" v-if="sending" />
 
         <md-card-actions>
-          <md-button type="submit" class="md-primary" :disabled="sending" @click="passValid">to register</md-button>
+          <md-button type="submit" class="md-primary" :disabled="sending" @click="passValid()">to register</md-button>
         </md-card-actions>
 
       </md-card>
@@ -64,6 +66,7 @@
 </template>
 
 <script lang="js">
+  import axios from 'axios'
   import { validationMixin } from 'vuelidate'
   import {
     required,
@@ -79,6 +82,7 @@
 
     },
     data: () => ({
+      api_url: 'http://localhost:9000/api',
       passValidVal: true,
       form: {
         firstName: null,
@@ -108,7 +112,18 @@
         }
       }
     },
+
     methods: {
+
+      createUser: function() {
+        axios.post(this.api_url+"/user/create",{
+          user: this.form
+        }).then(result => {
+            console.log(result);
+        }).catch(err => {
+          console.log(err);
+        })
+      },
       passValid: function() {
         return this.passValidVal = this.form.password == this.form.confirmpassword
 
@@ -127,23 +142,26 @@
         this.form.firstName = null
         this.form.lastName = null
         this.form.email = null
+        this.form.password = null
+        this.form.confirmpassword = null
       },
       saveUser () {
         this.sending = true
 
         // Instead of this timeout, here you can call your API
-        window.setTimeout(() => {
-          this.lastUser = `${this.form.firstName} ${this.form.lastName}`
-          this.userSaved = true
-          this.sending = false
-          this.clearForm()
-        }, 1500)
+        // window.setTimeout(() => {
+        this.lastUser = `${this.form.firstName} ${this.form.lastName}`
+        this.userSaved = true
+        this.sending = false
+        // }, 1500)
       },
-      validateUser () {
+      async validateUser () {
         this.$v.$touch()
 
-        if (!this.$v.$invalid) {
-          this.saveUser()
+        if (!this.$v.$invalid && this.passValid) {
+          await this.saveUser()
+          await this.createUser()
+          this.clearForm()
         }
       }
     }
@@ -158,6 +176,7 @@
     flex-direction: column;
     margin: auto;
     form {
+      max-width: 400px;
       margin: auto;
       .md-card {
         min-width: 100%;

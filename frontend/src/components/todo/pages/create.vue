@@ -2,23 +2,31 @@
 
   <section class="create">
     <form novalidate class="md-layout" @submit.prevent="validateUser">
-      <md-card class="md-layout-item md-size-50 md-small-size-100">
-        <md-card-header>
+      <md-card class="md-layout-item  md-small-size-100">
+        <md-card-header v-if="mode=='CREATE'">
           <div class="md-title">Create card</div>
+        </md-card-header>
+
+        <md-card-header  v-else-if="mode=='EDIT'">
+          <div class="md-title">Edit card</div>
         </md-card-header>
 
         <md-card-content>
           <md-field :class="getValidationClass('card')">
             <label for="card">Enter text...</label>
-            <md-input type="text" v-model="form.card" :disabled="sending" />
+            <md-input type="text" name="card" v-model="form.card" :disabled="sending" />
             <span class="md-error" v-if="!$v.form.card.required">You didn’t enter the text</span>
           </md-field>
         </md-card-content>
 
         <md-progress-bar md-mode="indeterminate" v-if="sending" />
 
-        <md-card-actions>
+        <md-card-actions v-if="mode=='CREATE'">
           <md-button type="submit" class="md-primary" :disabled="sending" v-on:click="createCard">Сreate</md-button>
+        </md-card-actions>
+
+        <md-card-actions v-else-if="mode=='EDIT'">
+          <md-button type="submit" class="md-primary" :disabled="sending" v-on:click="editCard">Edit</md-button>
         </md-card-actions>
 
       </md-card>
@@ -29,6 +37,7 @@
 </template>
 
 <script lang="js">
+  
   import axios from 'axios'
   import { validationMixin } from 'vuelidate'
   import {
@@ -41,8 +50,10 @@
     props: [],
     
     data: () => ({
-      posts:[],
-      errors:[],
+      mode: '',
+      api_url: 'http://localhost:9000/api',
+      posts: [],
+      errors: [],
       form: {
         card: null,
       },
@@ -58,16 +69,20 @@
     },
     
     mounted () {
-        
+      if(this.$route.params.id) this.mode = 'EDIT'
+      else this.mode = 'CREATE'
+      
+      this.getCard()
     },
 
     methods: {
       createCard: function() {
-        axios.post('http://localhost:8080/api/todo/createCard',{
-            body: this.form.card
+        axios.post(this.api_url+"/todo/card/create",{
+            body: this.form.card,
           })
           .then(response => {
             console.log(response);
+            this.$router.push({path: '/todo'}) 
           })
           .catch(error => {
             console.log(error);
@@ -81,6 +96,35 @@
             'md-invalid': field.$invalid && field.$dirty
           }
         }
+      },
+
+      editCard: function() {
+        axios.post(this.api_url+"/todo/card/edit",{
+            id: this.$route.params.id,
+            body: this.form.card,
+          })
+          .then(response => {
+            console.log(response);
+            this.$router.push({path: '/todo'}) 
+          })
+          .catch(error => {
+            console.log(error);
+          })
+
+      },
+      
+      getCard() {
+        axios.post(this.api_url+"/todo/card/get/one",{
+            id: this.$route.params.id,
+          })
+          .then(response => {
+            this.form.card = response.data[0].body;
+            console.log(response.data[0].body)
+            console.log(this.form);
+          })
+          .catch(error => {
+            console.log(error);
+          })
       },
 
       clearForm () {

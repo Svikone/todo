@@ -22,19 +22,16 @@
 
           <md-field :class="getValidationClass('password')">
             <label>Your password</label>
-            <md-input v-model="form.password" type="password"></md-input>
-            <span class="md-error md-invalid" v-if="passValidVal==false" id="passerr">Invalid password</span>
+            <md-input v-model="form.password" :disabled="sending" type="password"></md-input>
+            <span class="md-error" v-if="!$v.form.password.required">The passwords is required</span>
           </md-field>
-
+          <router-link to="/auth/signup">Registration</router-link>
         </md-card-content>
-
         <md-progress-bar md-mode="indeterminate" v-if="sending" />
-
         <md-card-actions>
-          <md-button type="submit" class="md-primary" :disabled="sending" @click="passValid">continue</md-button>
+          <md-button type="submit" class="md-primary" :disabled="sending" @click="user()">continue</md-button>
         </md-card-actions>
       </md-card>
-
       <md-snackbar :md-active.sync="userSaved">The user {{ lastUser }} was saved with success!</md-snackbar>
     </form>
     
@@ -43,6 +40,7 @@
 </template>
 
 <script lang="js">
+  import axios from 'axios'
   import { validationMixin } from 'vuelidate'
   import {
     required,
@@ -57,6 +55,8 @@
 
     },
     data: () => ({
+      api_url: 'http://localhost:9000/api',
+
       passValidVal: true,
       form: {
         firstName: null,
@@ -66,6 +66,7 @@
       sending: false,
       lastUser: null
     }),
+
     validations: {
       form: {
         firstName: {
@@ -77,11 +78,22 @@
         }
       }
     },
+    
     methods: {
-      passValid: function() {
-        return this.passValidVal = this.form.password == this.form.confirmpassword
+      user() {
+        axios.post(this.api_url+"/user/signin",{
+          user: this.form
+        }).then(result => {
+          localStorage.setItem('token', result.data.token);
+          axios.defaults.headers['x-access-token'] = localStorage.getItem("token");
 
+          this.$router.push({path: '/todo'}) 
+          console.log(result);
+        }).catch(err => {
+          console.log(err);
+        })
       },
+
       getValidationClass (fieldName) {
         const field = this.$v.form[fieldName]
         
@@ -91,14 +103,16 @@
           }
         }
       },
+
       clearForm () {
         this.$v.$reset()
         this.form.firstName = null
+        this.form.password = null
         
       },
+
       saveUser () {
         this.sending = true
-
         // Instead of this timeout, here you can call your API
         window.setTimeout(() => {
           this.lastUser = `${this.form.firstName} `
@@ -107,9 +121,9 @@
           this.clearForm()
         }, 1500)
       },
+
       validateUser () {
         this.$v.$touch()
-
         if (!this.$v.$invalid) {
           this.saveUser()
         }
@@ -125,6 +139,8 @@
     height: 100%;
     flex-direction: column;
     form {
+      max-width: 400px;
+      width: 100%;
       margin: auto;
       .md-card {
         min-width: 100%;

@@ -22,24 +22,29 @@
           </md-toolbar>
 
           <md-list>
+            <md-list-item to="/todo">
+              <md-icon>list</md-icon>
+              <span class="md-list-item-text">List</span>
+            </md-list-item>
+
             <md-list-item to="/todo/create">
               <md-icon>create</md-icon>
               <span class="md-list-item-text">Create card</span>
             </md-list-item>
 
             <md-list-item to="/auth/signin">
-              <md-icon>move_to_inbox</md-icon>
+              <md-icon>account_circle</md-icon>
               <span class="md-list-item-text">SignIn</span>
             </md-list-item>
 
             <md-list-item to="/auth/signup">
-              <md-icon>delete</md-icon>
+              <md-icon>supervised_user_circle</md-icon>
               <span class="md-list-item-text">SignUp</span>
             </md-list-item>
 
-            <md-list-item>
+            <md-list-item @click="exit()">
               <md-icon>exit_to_app</md-icon>
-              <span class="md-list-item-text">Exit</span>
+              <span class="md-list-item-text" >Exit</span>
             </md-list-item>
           </md-list>
         </md-app-drawer>
@@ -56,19 +61,40 @@
 </template>
 
 <script lang="js">
+  import axios from 'axios'
 
   export default  {
     name: 'todo',
     props: [],
     mounted () {
-
+      this.auth()
     },
     data: () => ({
-      menuVisible: false
+      menuVisible: false,
+      api_url: 'http://localhost:9000/api',
     }),
     methods: {
       toggleMenu () {
         this.menuVisible = !this.menuVisible
+      },
+
+      exit() {
+        localStorage.removeItem('token');
+        this.$router.push({path: '/auth/signin'});
+        axios.defaults.headers['x-access-token'] = '';
+      },
+
+      auth() {
+        axios.post(this.api_url+'/user/verify',{})
+        .then(result => {
+          console.log(result)
+
+          if(result.data.verify) return
+          else this.$router.push({path: '/auth/signin'});
+        }).catch(err => {
+          this.$router.push({path: '/auth/signin'});
+          console.log(err.response)
+        })
       }
     }
     

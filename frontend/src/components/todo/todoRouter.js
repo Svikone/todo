@@ -1,5 +1,4 @@
 import create from '@/components/todo/pages/create'
-import edit from '@/components/todo/pages/edit'
 import todo from '@/components/todo/todo'
 import list from '@/components/todo/pages/list'
 
@@ -13,8 +12,8 @@ export default {
             component: create
         },
         {
-            path: 'edit',
-            component: edit
+            path: ':id/edit',
+            component: create
         },
         {
             path: '',
