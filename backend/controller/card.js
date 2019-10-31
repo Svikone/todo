@@ -15,9 +15,13 @@ exports.create = (req, res) => {
     })
 }
 
-exports.getAll = (req, res) => {
-    Modules.find({author: req.user.user}).sort({$natural: -1}).then(result => {
-        res.send(result).status(200);
+exports.getAll = async (req, res) => {
+    let page = req.body.page
+    if(page == 1) page = 0
+    else page = page * 10 - 10
+    const count = await Modules.find({author: req.user.user}).count()
+    Modules.find({author: req.user.user}).skip(page).limit(10).then(result => {
+        res.send({result, count}).status(200);
     }).catch(err => {
         res.sendStatus(500);
     })

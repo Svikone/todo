@@ -2,7 +2,14 @@
 
   <section class="list">
     <h1>Your cards are displayed here</h1>
-    <card  v-for="(card, i) in cards" v-bind:text="card" v-bind:key="i"></card>
+    <card v-for="(card, i) in cards" v-bind:text="card" v-bind:key="i" ></card>
+    <b-pagination
+      v-model="currentPage"
+      :total-rows="cardLength"
+      :per-page="perPage"
+      @input="getAllCard()"
+    ></b-pagination>
+
   </section>
 
 </template>
@@ -21,8 +28,7 @@
     props: [],
     mounted () {
       this.getAllCard(),
-      eventBus.$on("update", data => {
-        console.log(data)
+      eventBus.$on("update",() => {
         this.getAllCard()
       })
     },
@@ -30,15 +36,20 @@
     data () {
       return {
         api_url: 'http://localhost:9000/api',
-        cards: []
+        cards: [],
+        perPage: 10,
+        currentPage:1,
+        cardLength: 1
+
       }
     },
 
     methods: {
       getAllCard() {
-        axios.post(this.api_url+"/todo/card/get/all",{}
+        axios.post(this.api_url+"/todo/card/get/all",{page: this.currentPage}
         ).then(result => {
-          this.cards = result.data
+          this.cards = result.data.result
+          this.cardLength = result.data.count
         })
       }
     },

@@ -39,6 +39,7 @@
 <script lang="js">
   
   import axios from 'axios'
+  import {eventBus} from '../../../main.js'
   import { validationMixin } from 'vuelidate'
   import {
     required,
@@ -69,10 +70,16 @@
     },
     
     mounted () {
-      if(this.$route.params.id) this.mode = 'EDIT'
-      else this.mode = 'CREATE'
-      
+      eventBus.$on("createState",() => {
+        this.form.card = null
+        this.setMode()
+      })
+      this.setMode() 
+      console.log(this.mode)
       this.getCard()
+    },
+    beforeUpdate() {
+      console.log("update")
     },
 
     methods: {
@@ -148,6 +155,11 @@
         if (!this.$v.$invalid) {
           this.saveUser()
         }
+      },
+
+      setMode() {
+        if(this.$route.params.id) this.mode = 'EDIT'
+        else this.mode = 'CREATE'
       }
     } 
   }

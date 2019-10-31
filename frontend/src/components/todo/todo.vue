@@ -27,9 +27,9 @@
               <span class="md-list-item-text">List</span>
             </md-list-item>
 
-            <md-list-item to="/todo/create">
+            <md-list-item @click="senState()" to="/todo/create">
               <md-icon>create</md-icon>
-              <span class="md-list-item-text">Create card</span>
+              <span class="md-list-item-text" >Create card</span>
             </md-list-item>
 
             <md-list-item to="/auth/signin">
@@ -62,6 +62,8 @@
 
 <script lang="js">
   import axios from 'axios'
+  import {eventBus} from '../../main.js'
+
 
   export default  {
     name: 'todo',
@@ -95,6 +97,10 @@
           this.$router.push({path: '/auth/signin'});
           console.log(err.response)
         })
+      },
+
+      senState() {
+          eventBus.$emit("createState")
       }
     }
     
