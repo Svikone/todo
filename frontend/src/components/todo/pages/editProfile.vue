@@ -106,13 +106,11 @@
 
       editPassword() {
         axios.post(this.api_url+'/user/password/edit',{password: this.form})
-        .then(response => {
-          console.log(response);
+        .then(() => {
           this.$router.push({path: '/todo'}) 
         })
-        .catch(error => {
+        .catch(() => {
           alert("You entered an incorrect password")
-          console.log(error);
         })
       },
 
@@ -126,7 +124,6 @@
       },
 
       validatePass () {
-        console.log(!this.$v.$invalid,this.passValidVal)
         if (!this.$v.$invalid && this.passValidVal) {
           this.editPassword()
         }
@@ -135,7 +132,6 @@
       validateUser () {
         if (!this.validEmail(this.user.email)) {
           this.userVal = false
-          console.log(this.userVal)
         }else {
           this.userVal = true
           this.editUser()
@@ -154,12 +150,10 @@
         formData.append("image", imagefile.files[0])
         formData.append("email", this.user.email)
         axios.post(this.api_url+'/user/profil/edit',formData)
-        .then(result => {
+        .then(() => {
           eventBus.$emit("updateProfil")
-          console.log(result);
           this.$router.push({path: '/todo'}) 
-        }).catch(err => {
-          console.log(err);
+        }).catch(() => {
         })
       },
     }

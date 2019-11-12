@@ -88,17 +88,13 @@
         }).then(result => {
           localStorage.setItem('token', result.data.token);
           axios.defaults.headers['x-access-token'] = localStorage.getItem("token");
-
           this.$router.push({path: '/todo'}) 
-          console.log(result);
-        }).catch(err => {
-          console.log(err);
+        }).catch(() => {
         })
       },
 
       getValidationClass (fieldName) {
         const field = this.$v.form[fieldName]
-        
         if (field) {
           return {
             'md-invalid': field.$invalid && field.$dirty
@@ -115,7 +111,6 @@
 
       saveUser () {
         this.sending = true
-        // Instead of this timeout, here you can call your API
         window.setTimeout(() => {
           this.lastUser = `${this.form.firstName} `
           this.userSaved = true

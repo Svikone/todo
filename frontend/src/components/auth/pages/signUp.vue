@@ -132,17 +132,14 @@
         formData.append("password", this.form.password)
 
         axios.post(this.api_url+"/user/create",formData)
-        .then(result => {
-          console.log(result);
-        }).catch(err => {
+        .then(() => {
+        }).catch(() => {
           alert("This name already exists")
-          console.log(err);
         })
       },
 
       passValid: function() {
         this.passValidVal = this.form.password == this.form.confirmpassword
-        console.log(this.passValidVal)
       },
 
       getValidationClass (fieldName) {
@@ -169,13 +166,9 @@
 
       saveUser () {
         this.sending = true
-
-        // Instead of this timeout, here you can call your API
-        // window.setTimeout(() => {
         this.lastUser = `${this.form.firstName} ${this.form.lastName}`
         this.userSaved = true
         this.sending = false
-        // }, 1500)
       },
 
       async validateUser () {

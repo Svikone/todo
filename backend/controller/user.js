@@ -7,9 +7,7 @@ exports.createUser = (req, res) => {
         lastname: req.body.lastName,
         email: req.body.email,
         password: req.body.password,
-        // url_img: req.files[0].filename
     } 
-    console.log(req.files)
     if(req.files.length > 0 ) user.url_img = req.files[0].filename
     else user.url_img = "404.png"
     Modules.findOne({firstname: user.firstname}).then(result => {
@@ -33,7 +31,6 @@ exports.signin = (req, res) => {
         if (result)
             jwt.sign({user: user.firstname}, 'secretkey', (err, token) => {
                 res.json({token});
-
             }).catch(err => {
                 res.sendStatus(500);
         })
@@ -60,7 +57,6 @@ exports.getUser = (req, res) => {
 exports.editProfil = (req, res) => {
         const img = req.files
         const email = req.body.email
-        console.log(img.length)
     if(img.length == 0) {
         Modules.findOne({firstname: req.user.user}).updateOne({email: email}).then(result => {
             res.send().status(200);

@@ -12,11 +12,9 @@
     name: 'edit',
     props: [],
     mounted () {
-
     },
     data () {
       return {
-
       }
     },
     methods: {

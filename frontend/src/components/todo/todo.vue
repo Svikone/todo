@@ -100,13 +100,12 @@
       auth() {
         axios.post(this.api_url+'/user/verify',{})
         .then(result => {
-          console.log(result)
 
           if(result.data.verify) return
           else this.$router.push({path: '/auth/signin'});
-        }).catch(err => {
+        }).catch(() => {
           this.$router.push({path: '/auth/signin'});
-          console.log(err.response)
+          // console.log(err.response)
         })
       },
 
@@ -116,9 +115,7 @@
           this.user = result.data.user
           localStorage.setItem('user', JSON.stringify(this.user))
 
-          console.log( result.data.user)
-        }).catch((err) => {
-          console.log(err);
+        }).catch(() => {
         })
       },
 

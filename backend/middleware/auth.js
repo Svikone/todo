@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 
 module.exports = function(req,res,next) {
-  // const cookie_token = req.cookies.token;
   const json_token = req.headers["x-access-token"];
   if (!json_token)
     return res.status(404).send({message:"Not access token"});

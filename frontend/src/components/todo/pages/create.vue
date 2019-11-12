@@ -73,11 +73,9 @@
         this.setMode()
       })
       this.setMode() 
-      console.log(this.mode)
       this.getCard()
     },
     beforeUpdate() {
-      console.log("update")
     },
 
     methods: {
@@ -85,12 +83,10 @@
         axios.post(this.api_url+"/todo/card/create",{
             body: this.form.card,
           })
-          .then(response => {
-            console.log(response);
+          .then(() => {
             this.$router.push({path: '/todo'}) 
           })
-          .catch(error => {
-            console.log(error);
+          .catch(() => {
           })
       },
       
@@ -108,12 +104,10 @@
             id: this.$route.params.id,
             body: this.form.card,
           })
-          .then(response => {
-            console.log(response);
+          .then(() => {
             this.$router.push({path: '/todo'}) 
           })
-          .catch(error => {
-            console.log(error);
+          .catch(() => {
           })
       },
       
@@ -123,11 +117,8 @@
           })
           .then(response => {
             this.form.card = response.data[0].body;
-            console.log(response.data[0].body)
-            console.log(this.form);
           })
-          .catch(error => {
-            console.log(error);
+          .catch(() => {
           })
       },
 
@@ -136,11 +127,8 @@
       },
 
       saveUser () {
-      console.log(this.form)
-
         this.$v.$reset()
         this.sending = true
-        // Instead of this timeout, here you can call your API
         window.setTimeout(() => {
           this.sending = false
           this.clearForm()

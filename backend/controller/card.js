@@ -29,7 +29,6 @@ exports.getAll = async (req, res) => {
 
 exports.remove = (req, res) => {
     Modules.find({_id: req.body.id}).remove().then(result => {
-        console.log(result)
         res.send(result).sendStatus(200);
     }).catch(err => {
         res.sendStatus(500);

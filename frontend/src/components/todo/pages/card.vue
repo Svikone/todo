@@ -22,7 +22,6 @@
       "text"
     ],
     mounted () {
-      console.log(this.text)
     },
     data: () => ({
       api_url: 'http://localhost:9000/api',
@@ -32,11 +31,9 @@
       removeCard() {
         axios.post(this.api_url+"/todo/card/remove", {
           id: this.text._id
-        }).then(result => {
-          console.log(result)
+        }).then(() => {
           eventBus.$emit("update")
-        }).catch(err => {
-          console.log(err);
+        }).catch(() => {
         })
       },
       
