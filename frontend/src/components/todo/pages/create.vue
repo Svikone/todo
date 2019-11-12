@@ -30,14 +30,12 @@
         </md-card-actions>
 
       </md-card>
-
     </form>
   </section>
 
 </template>
 
 <script lang="js">
-  
   import axios from 'axios'
   import {eventBus} from '../../../main.js'
   import { validationMixin } from 'vuelidate'
@@ -117,7 +115,6 @@
           .catch(error => {
             console.log(error);
           })
-
       },
       
       getCard() {

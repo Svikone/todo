@@ -14,7 +14,7 @@
                 <label for="first-name">First Name</label>
                 <md-input name="first-name" id="first-name" autocomplete="given-name" v-model="form.firstName" :disabled="sending" />
                 <span class="md-error" v-if="!$v.form.firstName.required">The first name is required</span>
-                <span class="md-error" v-else-if="!$v.form.firstName.minlength">Invalid first name</span>
+                <span class="md-error" v-else-if="!$v.form.firstName.minlength">At least 3 characters</span>
               </md-field>
             </div>
 
@@ -23,7 +23,7 @@
                 <label for="last-name">Last Name</label>
                 <md-input name="last-name" id="last-name" autocomplete="family-name" v-model="form.lastName" :disabled="sending" />
                 <span class="md-error" v-if="!$v.form.lastName.required">The last name is required</span>
-                <span class="md-error" v-else-if="!$v.form.lastName.minlength">Invalid last name</span>
+                <span class="md-error" v-else-if="!$v.form.lastName.minlength">At least 3 characterse</span>
               </md-field>
             </div>
           </div>
@@ -46,10 +46,14 @@
             <md-input v-model="form.confirmpassword" type="password"></md-input>
             <span class="md-error md-invalid" v-if="passValidVal==false" id="passerr">Invalid password</span>
           </md-field>
-          <router-link to="/auth/signin">Login</router-link>
+            <button type="button" class="md-fab font" @click="addImg()">upload
+            </button>
+            <input type="file" class="imgInp" id="file" ref="imgInput"/>
+          
+          <router-link to="/auth/signin" class="font">Login</router-link>
 
         </md-card-content>
-
+          
         <md-progress-bar md-mode="indeterminate" v-if="sending" />
 
         <md-card-actions>
@@ -60,7 +64,6 @@
 
       <md-snackbar :md-active.sync="userSaved">The user {{ lastUser }} was saved with success!</md-snackbar>
     </form>
-
   </section>
 
 </template>
@@ -84,6 +87,7 @@
     data: () => ({
       api_url: 'http://localhost:9000/api',
       passValidVal: true,
+      files: [],
       form: {
         firstName: null,
         lastName: null,
@@ -109,34 +113,51 @@
         },
         password: {
           required
+        },
+         confirmpassword: {
+          required
         }
       }
     },
 
     methods: {
-
       createUser: function() {
-        axios.post(this.api_url+"/user/create",{
-          user: this.form
-        }).then(result => {
-            console.log(result);
+        var formData = new FormData();
+        var imagefile = document.querySelector('#file');
+        
+        formData.append("image", imagefile.files[0])
+        formData.append("firstName", this.form.firstName)
+        formData.append("lastName", this.form.lastName)
+        formData.append("email", this.form.email)
+        formData.append("password", this.form.password)
+
+        axios.post(this.api_url+"/user/create",formData)
+        .then(result => {
+          console.log(result);
         }).catch(err => {
+          alert("This name already exists")
           console.log(err);
         })
       },
-      passValid: function() {
-        return this.passValidVal = this.form.password == this.form.confirmpassword
 
+      passValid: function() {
+        this.passValidVal = this.form.password == this.form.confirmpassword
+        console.log(this.passValidVal)
       },
+
       getValidationClass (fieldName) {
         const field = this.$v.form[fieldName]
-        
         if (field) {
           return {
             'md-invalid': field.$invalid && field.$dirty
           }
         }
       },
+
+      addImg() {
+        this.$refs.imgInput.click()
+      },
+
       clearForm () {
         this.$v.$reset()
         this.form.firstName = null
@@ -145,6 +166,7 @@
         this.form.password = null
         this.form.confirmpassword = null
       },
+
       saveUser () {
         this.sending = true
 
@@ -155,10 +177,10 @@
         this.sending = false
         // }, 1500)
       },
+
       async validateUser () {
         this.$v.$touch()
-
-        if (!this.$v.$invalid && this.passValid) {
+        if (!this.$v.$invalid && this.passValidVal) {
           await this.saveUser()
           await this.createUser()
           this.clearForm()
@@ -166,7 +188,6 @@
       }
     }
 }
-
 </script>
 
 <style scoped lang="scss">
@@ -186,6 +207,15 @@
         padding-top: 5px;
         color: #ff1744;
       }
+      .md-fab {
+        &:hover {
+          background: #1268ad;
+        }
+      }
+    }
+    .imgInp {
+      width: 0px;
+      height: 0px;
     }
   }
 </style>

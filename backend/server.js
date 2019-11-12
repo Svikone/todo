@@ -1,11 +1,12 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const db = require("./db");
 
-app.use(express.static(__dirname + '/'));
+const multer = require('multer');
+app.use('/file', express.static('file'));
+app.use(multer({dest:__dirname+'/file/uploads/'}).any());
 app.use(cors({origin: "http://localhost:8080"}));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use (bodyParser.json ({
@@ -16,7 +17,6 @@ app.use (bodyParser.json ({
 const cardRouter = require("./routes/card");
 const userRouter = require("./routes/user");
 
-app.use(cookieParser());
 app.use("/api/todo/card", cardRouter);
 app.use("/api/user", userRouter);
 

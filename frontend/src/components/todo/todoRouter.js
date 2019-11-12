@@ -1,6 +1,8 @@
 import create from '@/components/todo/pages/create'
 import todo from '@/components/todo/todo'
 import list from '@/components/todo/pages/list'
+import editProfile from '@/components/todo/pages/editProfile'
+
 
 export default {
     path: '/todo',
@@ -18,6 +20,10 @@ export default {
         {
             path: '',
             component: list
+        },
+        {
+            path: 'edit/profil',
+            component: editProfile
         },
         
     ]

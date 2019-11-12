@@ -8,8 +8,11 @@
             <md-icon>menu</md-icon>
           </md-button>
           <span class="md-title">ToDo</span>
+          <div class="profile">
+            <div class="name">{{user.firstname}}</div>
+            <img v-bind:src="'http://localhost:9000/file/uploads/'+user.img">
+          </div>
         </md-app-toolbar>
-
         <md-app-drawer :md-active.sync="menuVisible" md-persistent="mini">
           <md-toolbar class="md-transparent" md-elevation="0">
             <span>Navigation</span>
@@ -42,11 +45,17 @@
               <span class="md-list-item-text">SignUp</span>
             </md-list-item>
 
+            <md-list-item to="/todo/edit/profil">
+              <md-icon><img src="../../../public/edit.png"></md-icon>
+              <span class="md-list-item-text">Edit profile</span>
+            </md-list-item>
+
             <md-list-item @click="exit()">
               <md-icon>exit_to_app</md-icon>
               <span class="md-list-item-text" >Exit</span>
             </md-list-item>
           </md-list>
+
         </md-app-drawer>
 
         <md-app-content>
@@ -54,10 +63,7 @@
         </md-app-content>
       </md-app>
     </div>
-
-    
   </section>
-
 </template>
 
 <script lang="js">
@@ -67,11 +73,16 @@
 
   export default  {
     name: 'todo',
-    props: [],
+    // props: [],
     mounted () {
-      this.auth()
+      this.auth(),
+      this.getUser(),
+      eventBus.$on("updateProfil",() => {
+        this.getUser()
+      })
     },
     data: () => ({
+      user: [],
       menuVisible: false,
       api_url: 'http://localhost:9000/api',
     }),
@@ -99,19 +110,48 @@
         })
       },
 
+      getUser() {
+        axios.post(this.api_url+'/user/get/one',{})
+        .then(result => {
+          this.user = result.data.user
+          localStorage.setItem('user', JSON.stringify(this.user))
+
+          console.log( result.data.user)
+        }).catch((err) => {
+          console.log(err);
+        })
+      },
+
       senState() {
-          eventBus.$emit("createState")
+        eventBus.$emit("createState")
       }
     }
-    
 }
-
-
 </script>
 
 <style scoped lang="scss">
   .todo {
      height: 100%;
+    
+    .profile {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      .name {
+        color: white;
+        font-family: sans-serif;
+        font-size: 18px;
+      }
+      img {
+        margin-left: 5px;
+        border-radius: 50%;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+      }
+    }
+    
     .page-container {
       height: 100%;
       .md-app {

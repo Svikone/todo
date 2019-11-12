@@ -25,12 +25,14 @@
             <md-input v-model="form.password" :disabled="sending" type="password"></md-input>
             <span class="md-error" v-if="!$v.form.password.required">The passwords is required</span>
           </md-field>
-          <router-link to="/auth/signup">Registration</router-link>
+          <router-link to="/auth/signup" class="font">Registration</router-link>
         </md-card-content>
+
         <md-progress-bar md-mode="indeterminate" v-if="sending" />
         <md-card-actions>
           <md-button type="submit" class="md-primary" :disabled="sending" @click="user()">continue</md-button>
         </md-card-actions>
+        
       </md-card>
       <md-snackbar :md-active.sync="userSaved">The user {{ lastUser }} was saved with success!</md-snackbar>
     </form>

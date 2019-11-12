@@ -16,11 +16,9 @@
   import axios from 'axios'
   import {eventBus} from '../../../main.js'
 
-
   export default  {
     name: 'card',
     props: [
-      
       "text"
     ],
     mounted () {
@@ -29,7 +27,6 @@
     data: () => ({
       api_url: 'http://localhost:9000/api',
       state: null,
-      
     }),
     methods: {
       removeCard() {
@@ -53,14 +50,11 @@
           id: this.text._id
         })
       },
-    
-      
     },
 
     computed: {
-
     }
-}
+  }
 
 
 </script>

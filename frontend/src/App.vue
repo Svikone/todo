@@ -25,6 +25,24 @@ export default {
 
 <style>
   #app {
+    
     height: 100%;
+  }
+  .md-fab {
+    display: flex;
+    justify-content: center;
+    width: 130px;
+    border-radius: 10px;
+    border: none;
+    background: #1a82d4;
+    font-family: sans-serif;
+    color: white;
+    margin-bottom: 10px;
+    height: 40px;
+  }
+  .font {
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
   }
 </style>

@@ -2,7 +2,7 @@
 
   <section class="list">
     <h1>Your cards are displayed here</h1>
-    <card v-for="(card, i) in cards" v-bind:text="card" v-bind:key="i" ></card>
+    <card v-for="(card, i) in cards" v-bind:text="card" v-bind:key="i"></card>
     <b-pagination
       v-model="currentPage"
       :total-rows="cardLength"
@@ -68,6 +68,11 @@
 
 <style scoped lang="scss">
   .list {
-
+    min-height: 86vh;
+    position: relative;
+    .pagination {
+      position: absolute;
+      bottom: -64px;
+    }
   }
 </style>
