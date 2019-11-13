@@ -9,4 +9,4 @@
   - $ npm i 
   - starting mongo db and create database named 'todo'
   - $ node server
-> Open brovser to : http://localhost:8080/
+> Open brovser to : http://localhost:8080/todo
